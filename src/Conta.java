@@ -1,10 +1,12 @@
+import lombok.Getter;
+
 interface IConta {
     void sacar(double valor);
     void depositar(double valor);
     void transferir(double valor, Conta contaDestino);
     void imprimirExtrato();
 }
-
+@Getter
 public abstract class Conta implements IConta{
 
     private static final int AGENCIA_PADRAO = 1;
@@ -23,7 +25,10 @@ public abstract class Conta implements IConta{
 
     @Override
     public void sacar(double valor) {
-        saldo -= valor;
+        if (valor <= saldo){
+            saldo -= valor;
+        } else System.out.println("Saldo Insuficiente para sacar: " + saldo);
+
     }
 
     @Override
@@ -33,21 +38,11 @@ public abstract class Conta implements IConta{
 
     @Override
     public void transferir(double valor, Conta contaDestino) {
-        this.sacar(valor);
-        contaDestino.depositar(valor);
-    }
+        if(valor <= saldo){
+            this.sacar(valor);
+            contaDestino.depositar(valor);
+        } else System.out.println("Saldo Insuficiente para transferencia: " + saldo);
 
-
-    public double getSaldo() {
-        return saldo;
-    }
-
-    public int getAgencia() {
-        return agencia;
-    }
-
-    public int getNumero() {
-        return numero;
     }
 
     protected void ImprimirInfo() {
